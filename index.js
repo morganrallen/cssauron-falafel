@@ -21,6 +21,15 @@ function get_id(node) {
       return node.callee && node.callee.name;
     break;
 
+    case 'variable-decl':
+      console.log(node);
+      return node.left && node.left.property && node.left.property.name;
+    break;
+
+    case 'assign':
+      return node.left && node.left.property && node.left.property.name;
+    break;
+
     case 'lookup':
       return node.property && node.property.name;
     break;

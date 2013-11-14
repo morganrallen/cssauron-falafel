@@ -1,12 +1,23 @@
+/* jshint asi: true, laxcomma: true, expr: true */
+require("colors")
+var tests = {}
 var lang = require('./index')
-  , is_forloop = lang('for')
-  , is_while = lang('while + do-while')
-  , is_ident = lang('id:contains(y)') 
-  , results = {}
 
-var find_test = lang('for > .test')
-var generic_id_test = lang("#id");
-var function_id_test = lang("function#id");
+function addTest(selector, expectance) {
+  tests[selector] = expectance;
+}
+
+addTest('for', 2);
+addTest('while + do-while', 1)
+addTest('id:contains(y)', 1) 
+addTest('for > .test', 2)
+addTest("#y", 1)
+addTest("#i", 1)
+addTest('for #i', 1)
+addTest('#id #variable', 1)
+addTest('assign#that', 1);
+addTest('#id variable#variable', 1);
+addTest('#id variable-decl#that', 1);
 
 var falafel = require('falafel')
 
@@ -34,45 +45,22 @@ function test() {
 }
 
 
-falafel(test+'', function(node) {
-  if(is_forloop(node)) {
-    (results.is_forloop = results.is_forloop || []).push(node.source())
-  }
-  if(is_while(node)) {
-    (results.is_while = results.is_while || []).push(node.source())
-  }
-  if(is_ident(node)) {
-    (results.is_ident = results.is_ident || []).push(node.source())
-  }
-  if(find_test(node)) {
-    console.log(node, '---!')
-  }
-
-  if(lang("#id")(node)) {
-    console.log("gerneric id");
-  }
-  if(function_id_test(node)) {
-    console.log("function id");
-  }
-  if(lang("#variable")(node)) {
-    console.log("generic variable");
-  }
-
-  if(lang("call#id")(node)) {
-    console.log("call to function id");
-  }
-
-  if(lang("lookup#that")(node)) {
-    console.log("accessing propery that");
-  }
-
-  if(lang("for #i")(node)) {
-    console.log("variable i in for-loop");
-  }
-
-  if(lang("#id #variable")(node)) {
-    console.log("variable in function");
+falafel(''+test, function(node) {
+  for(var selector in tests) {
+    if(lang(selector)(node)) tests[selector]--;
   }
 })
 
-console.log(results)
+var fail = false;
+
+for(var selector in tests) {
+  if(tests[selector] > 0) {
+    fail = true;
+    console.log("%s failed %s tests", selector.red, tests[selector]);
+  } else if(tests[selector] < 0) {
+    fail = true;
+    console.log("%s passed %s too many times", selector.red, -tests[selector]);
+  }
+}
+
+if(!fail) console.log("All tests passed");
