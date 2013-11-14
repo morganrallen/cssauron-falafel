@@ -69,6 +69,10 @@ falafel(test+'', function(node) {
   if(lang("for #i")(node)) {
     console.log("variable i in for-loop");
   }
+
+  if(lang("#id #variable")(node)) {
+    console.log("variable in function");
+  }
 })
 
 console.log(results)
