@@ -5,10 +5,20 @@ var lang = require('./index')
   , results = {}
 
 var find_test = lang('for > .test')
+var generic_id_test = lang("#id");
+var function_id_test = lang("function#id");
 
 var falafel = require('falafel')
 
 function test() {
+  function id() {
+    var variable = "derp";
+  }
+
+  id();
+
+  this.that = "derp";
+
   var y = 3
     , z
 
@@ -36,6 +46,28 @@ falafel(test+'', function(node) {
   }
   if(find_test(node)) {
     console.log(node, '---!')
+  }
+
+  if(generic_id_test(node)) {
+    console.log("gerneric id");
+  }
+  if(function_id_test(node)) {
+    console.log("function id");
+  }
+  if(lang("#variable")(node)) {
+    console.log("generic variable");
+  }
+
+  if(lang("call#id")(node)) {
+    console.log("call to function id");
+  }
+
+  if(lang("lookup#that")(node)) {
+    console.log("accessing propery that");
+  }
+
+  if(lang("for #i")(node)) {
+    console.log("variable i in for-loop");
   }
 })
 

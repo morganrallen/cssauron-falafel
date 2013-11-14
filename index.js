@@ -2,12 +2,33 @@ var cssauron = require('cssauron')
 
 module.exports = cssauron({
     tag: function(node) { return map[node.type] }
+  , id: get_id
   , parent: 'parent'
   , children: get_children
   , contents: 'source()'
   , 'class': get_class
   , attr: function(node, attr) { return node[attr] }
 })
+
+function get_id(node) {
+  switch(map[node.type]) {
+    case 'variable':
+    case 'function':
+      return node.id && node.id.name;
+    break;
+
+    case 'call':
+      return node.callee && node.callee.name;
+    break;
+
+    case 'lookup':
+      return node.property && node.property.name;
+    break;
+
+    default:
+      return false;
+  }
+}
 
 function get_class(node) {
   if(!node.parent) {
