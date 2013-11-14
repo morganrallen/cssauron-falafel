@@ -48,7 +48,7 @@ falafel(test+'', function(node) {
     console.log(node, '---!')
   }
 
-  if(generic_id_test(node)) {
+  if(lang("#id")(node)) {
     console.log("gerneric id");
   }
   if(function_id_test(node)) {
