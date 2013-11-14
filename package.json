@@ -22,6 +22,7 @@
     "cssauron": "~1.0.0"
   },
   "devDependencies": {
-    "falafel": "~0.3.1"
+    "falafel": "~0.3.1",
+    "tape": "~2.1.0"
   }
 }
