@@ -13,8 +13,11 @@ examples
 ```
 
 `#double` would return `function double(....` and `double(1)`
+
 `call#double` would only return `double(1)` while `function#double` would return `function(value)..`
+
 `#double #y` would return all of `y`s in `function double() {}`
+
 `#double variable#y` would only return `var y = value'
 
 
